@@ -1,0 +1,611 @@
+VERIFICACIÓN DE REQUISITOS - SISTEMA DE TRABAJOS DE GRADO UTS
+Proyecto: Parcial_EdwingMejia_JuanLache
+Integrantes: Edwing Mejía y Juan Lache
+Referencia: presentación del profesor y especificación de 100 RF + 18 RNF.
+
+ENTREGA: carpeta JSP/JSTL/JSPF para Tomcat 8.5 (NO .war, NO clases .java, NO servlets propios).
+Motor online: Supabase PostgreSQL en esquema independiente uts_grado.
+El documento original pide MySQL online en RNF-17; la adaptación a PostgreSQL NO satisface literalmente ese requisito.
+
+ESTADO: evidencia estática de código; pendiente de pruebas funcionales en el Tomcat del usuario.
+La inclusión de una página o consulta NO demuestra por sí sola que un requisito funcione en todos los escenarios.
+La disponibilidad, rendimientos y respaldos 30 días necesitan pruebas operativas externas.
+
+REQUISITOS Y EVIDENCIAS (118):
+
+RF-01 - El sistema deberá permitir a los usuarios registrados iniciar sesión mediante sus credenciales.
+Actor: Todos los usuarios
+✅ IMPLEMENTADO EN CÓDIGO: login.jsp valida correo y contraseña con hash SHA-256 y estado activo.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-02 - El sistema deberá autenticar las credenciales e identificar el rol del usuario como Estudiante, Docente Director, Docente Evaluador, Comité o Administrador.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: login.jsp extrae el rol SQL y lo guarda en sesión.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-03 - El sistema deberá mostrar únicamente las funcionalidades y la información autorizadas para el rol del usuario autenticado.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: WEB-INF/jspf/seguridad.jspf y verificaciones por rol/proyecto de cada JSP controlan sesión activa y visibilidad.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-04 - El sistema deberá permitir al Administrador crear cuentas de usuario.
+Actor: Administrador
+✅ IMPLEMENTADO EN CÓDIGO: admin/usuarios.jsp y acciones/guardar.jsp insertan usuarios.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-05 - El sistema deberá permitir al Administrador modificar los datos de una cuenta y activar o desactivar su acceso sin eliminar su historial.
+Actor: Administrador
+✅ IMPLEMENTADO EN CÓDIGO: admin/usuarios.jsp modifica datos y activo sin borrar historiales.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-06 - El sistema deberá permitir al Administrador asignar o modificar los roles de usuario, limitándolos a los cinco roles definidos para la réplica.
+Actor: Administrador
+✅ IMPLEMENTADO EN CÓDIGO: admin/usuarios.jsp permite asignar ESTUDIANTE/DIRECTOR/EVALUADOR/COMITE/ADMINISTRADOR.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-07 - El sistema deberá permitir al Administrador registrar y actualizar para cada Estudiante la carrera o programa académico, el nivel de formación y el tipo de plan de estudios, indicando si es anterior o posterior al Decreto 1330 de 2019.
+Actor: Administrador
+✅ IMPLEMENTADO EN CÓDIGO: Formulario de Administración almacena programa, nivel y plan.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-08 - El sistema deberá permitir al Administrador registrar y actualizar el porcentaje de créditos aprobados y el estado de aprobación de Metodología para la Elaboración de Proyectos, Metodología de la Investigación o su equivalente.
+Actor: Administrador
+✅ IMPLEMENTADO EN CÓDIGO: Administrador registra porcentaje y aprobación de Metodología.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-09 - El sistema deberá permitir al Administrador buscar y filtrar usuarios por identificación, nombre, correo, rol, programa académico, nivel de formación, tipo de plan o estado de la cuenta.
+Actor: Administrador
+✅ IMPLEMENTADO EN CÓDIGO: admin/usuarios.jsp: busca por identidad, nombre, correo, rol, programa, nivel, plan y estado.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-10 - El sistema deberá permitir al Administrador consultar y filtrar la auditoría por usuario, proyecto, entidad afectada, tipo de acción y rango de fechas, visualizando quién realizó el cambio, qué cambió y cuándo ocurrió.
+Actor: Administrador
+✅ IMPLEMENTADO EN CÓDIGO: admin/auditoria.jsp consulta el registro de operaciones; acciones/guardar.jsp registra responsable, acción, fecha, entidad y datos del cambio. Se debe comprobar historial de valores en despliegue.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-11 - El sistema deberá permitir al Estudiante consultar su información académica registrada y conocer si se encuentra habilitado para iniciar el proceso de Trabajo de Grado.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: estudiante/habilitacion.jsp presenta datos y resultado de requisitos.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-12 - El sistema deberá determinar, a partir del tipo de plan registrado por el Administrador, si al Estudiante se le aplican las reglas de un plan anterior o posterior al Decreto 1330 de 2019.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: Validaciones diferencian planes anteriores y posteriores al Decreto 1330.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-13 - El sistema deberá reconocer como modalidades de Trabajo de Grado: Proyecto de Investigación, Desarrollo Tecnológico, Monografía, Seminario, Práctica y Emprendimiento.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: bd/02_datos_iniciales.sql registra las seis modalidades especificadas.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-14 - El sistema deberá restringir al Estudiante del nivel Técnico Profesional a la modalidad Práctica, de acuerdo con el Reglamento de Trabajo de Grado.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: Validación en banco, creación de proyecto y habilitación restringe las modalidades.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-15 - Para planes anteriores al Decreto 1330, el sistema deberá habilitar Proyecto de Investigación, Monografía, Desarrollo Tecnológico y Emprendimiento únicamente cuando el Estudiante tenga al menos el 75 % de los créditos aprobados y haya aprobado Metodología para la Elaboración de Proyectos, Metodología de la Investigación o su equivalente.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: Filtro SQL requiere >=75 %, metodología y modalidad pertinente.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-16 - Para planes anteriores al Decreto 1330, el sistema deberá habilitar la modalidad Seminario únicamente cuando el Estudiante tenga al menos el 90 % de los créditos aprobados y haya aprobado Metodología para la Elaboración de Proyectos, Metodología de la Investigación o su equivalente.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: Validación SQL exige 90 % y Metodología.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-17 - Para planes anteriores al Decreto 1330, el sistema deberá habilitar la modalidad Práctica cuando el Estudiante tenga al menos el 90 % de los créditos aprobados y haya aprobado Metodología para la Elaboración de Proyectos, Metodología de la Investigación o su equivalente; para el nivel Técnico Profesional deberá aceptar como mínimo el 70 % de los créditos aprobados.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: Condición de SQL aplica 90 % general y 70 % en Técnico.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-18 - Para planes posteriores al Decreto 1330, el sistema deberá validar los requisitos de matrícula y aprobación de Seminario de Grado I o III y de los espacios académicos acreditables Seminario de Grado II o IV que correspondan al nivel y a la etapa del proceso.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: bd/01_esquema.sql y admin/usuarios.jsp guardan matrícula y aprobación de Seminarios I/III y acreditación II/IV; habilitacion.jsp aplica reglas por nivel. Se requiere contrastar la parametrización con la norma oficial vigente.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-19 - El sistema deberá validar que el Trabajo de Grado tenga máximo dos Estudiantes y solo permitirá hasta tres integrantes en Proyecto de Investigación o Desarrollo Tecnológico cuando el Comité registre la excepción institucional correspondiente.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: bd/01_esquema.sql activa límite en trigger integrantes_limite con bloqueo de proyecto; acciones/guardar.jsp aplica excepción de Comité solo para Investigación/Desarrollo.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-20 - Cuando el Estudiante no cumpla una condición de Fase 0, el sistema deberá indicar de forma explícita el requisito académico que impide continuar y mostrar únicamente las modalidades para las que sí se encuentra habilitado.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: estudiante/habilitacion.jsp detalla requisitos no acreditados por plan y nivel y restringe modalidades habilitadas.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-21 - El sistema deberá permitir al Comité crear, activar, cerrar y consultar los periodos académicos utilizados en la gestión de los Trabajos de Grado.
+Actor: Comité
+✅ IMPLEMENTADO EN CÓDIGO: comite/periodos.jsp crea, consulta, activa y cierra periodos.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-22 - El sistema deberá permitir al Comité parametrizar las fechas de inicio y cierre de las fases, actividades y plazos del proceso para cada periodo académico.
+Actor: Comité
+✅ IMPLEMENTADO EN CÓDIGO: comite/periodos.jsp y acciones/guardar.jsp: creación, actualización y reprogramación de actividades.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-23 - El sistema deberá permitir a los usuarios consultar el calendario vigente del proceso de Trabajos de Grado.
+Actor: Todos los usuarios
+✅ IMPLEMENTADO EN CÓDIGO: comun/calendario.jsp muestra fechas vigentes.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-24 - El sistema deberá permitir al Comité crear, modificar, habilitar o cerrar las ideas registradas en el Banco de Ideas.
+Actor: Comité
+✅ IMPLEMENTADO EN CÓDIGO: comite/ideas.jsp y acciones/guardar.jsp: crear, editar, abrir y cerrar ideas.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-25 - El sistema deberá permitir al Comité establecer la fecha de apertura y la fecha de cierre del Banco de Ideas para cada periodo académico.
+Actor: Comité
+✅ IMPLEMENTADO EN CÓDIGO: comite/periodos.jsp: Comité modifica fechas de apertura y cierre del Banco de Ideas.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-26 - El sistema deberá permitir al Estudiante consultar las ideas disponibles en el Banco de Ideas mientras el periodo se encuentre abierto.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: estudiante/banco.jsp lista ideas abiertas dentro del plazo.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-27 - El sistema deberá mostrar al Estudiante únicamente las ideas compatibles con su programa, nivel de formación y condiciones académicas registradas.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: estudiante/banco.jsp filtra ideas por programa, nivel y prerrequisitos académicos actualizados.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-28 - El sistema deberá permitir al Estudiante seleccionar una idea disponible del Banco de Ideas como base para su propuesta.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: Botón elegir idea crea borrador asociado al registro del banco.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-29 - El sistema deberá permitir al Estudiante registrar una propuesta propia cuando no seleccione una idea existente del Banco de Ideas.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: estudiante/proyectos.jsp permite registrar proyecto sin idea.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-30 - El sistema deberá impedir nuevas selecciones del Banco de Ideas cuando se haya alcanzado la fecha de cierre parametrizada para el periodo académico.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: Consulta SQL bloquea selecciones fuera de fecha.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-31 - El sistema deberá permitir al Estudiante crear un proyecto únicamente después de superar las validaciones de Fase 0.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: acciones/guardar.jsp valida la Fase 0 antes de crear proyecto tanto desde idea como propuesta propia.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-32 - El sistema deberá asignar a cada proyecto un código o identificador único que se conserve durante todo el proceso.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: Código UTS-0000001 generado desde la clave única del proyecto.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-33 - El sistema deberá permitir al Estudiante registrar a los demás integrantes del proyecto cuando el Trabajo de Grado sea desarrollado en equipo.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: estudiante/integrantes.jsp vincula integrantes por identificación.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-34 - El sistema deberá validar la cantidad de integrantes y sus condiciones académicas antes de permitir enviar la propuesta.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: acciones/guardar.jsp revalida integrantes, elegibilidad y excepciones al envío; el esquema refuerza el límite del equipo.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-35 - El sistema deberá permitir al Estudiante consultar sus propios proyectos y buscar dentro de ellos por código o título, visualizando su estado, fase y fechas relevantes.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: Filtrado por código/título, más estado, fase y fechas en proyectos.jsp.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-36 - El sistema deberá permitir al Docente Director buscar y filtrar únicamente sus proyectos asignados por código, título, Estudiante, fase, estado o periodo académico.
+Actor: Docente Director
+✅ IMPLEMENTADO EN CÓDIGO: director/proyectos.jsp: filtra sus proyectos por código, título, estudiante, fase, estado y periodo.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-37 - El sistema deberá permitir al Docente Evaluador buscar y filtrar únicamente sus evaluaciones asignadas por código de proyecto, título, Estudiante, tipo de evaluación, estado o periodo académico.
+Actor: Docente Evaluador
+✅ IMPLEMENTADO EN CÓDIGO: evaluador/proyectos.jsp: filtros por código, título, estudiante, tipo de evaluación, estado y periodo.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-38 - El sistema deberá permitir al Comité buscar y filtrar los proyectos del programa por código, título, Estudiante, Docente Director, Docente Evaluador, modalidad, fase, estado, periodo académico o palabras registradas en el proyecto.
+Actor: Comité
+✅ IMPLEMENTADO EN CÓDIGO: comite/asignaciones.jsp: búsqueda por texto, responsables, modalidad, fase, estado, periodo y programa.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-39 - El sistema deberá mantener un historial cronológico de estados, fases, actuaciones, documentos, evaluaciones y decisiones de cada proyecto.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: acciones/guardar.jsp registra historial de operaciones asociadas al proyecto y las transiciones específicas guardan estado anterior/nuevo; historial.jsp expone cronología.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-40 - El sistema deberá permitir al Estudiante registrar el título, modalidad, modalidad específica, descripción del problema, justificación, objetivo general, objetivos específicos y demás información exigida por el formato F-DC-124 para la propuesta.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: estudiante/propuesta.jsp registra datos académicos y apartados F-DC-124; agrega un campo extensible de apartados vigentes y permite adjuntar el formato completo.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-41 - El sistema deberá permitir al Estudiante cargar el documento de propuesta diligenciado en el formato institucional F-DC-124 vigente.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: estudiante/documentos.jsp y acciones/subir_archivo.jsp: guarda contenido real del F-DC-124 por partes en MySQL.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-42 - El sistema deberá permitir al Estudiante seleccionar o solicitar un Docente Director y registrar un codirector cuando la propuesta requiera esta figura.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: Formulario envía solicitudes que el Comité puede consultar para formalizar.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-43 - El sistema deberá permitir al Estudiante enviar la propuesta al Docente Director para revisión.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: propuesta_enviar cambia a EN_REVISION tras comprobar versión y Director.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-44 - El sistema deberá permitir al Docente Director revisar la propuesta y registrar observaciones de forma y contenido.
+Actor: Docente Director
+✅ IMPLEMENTADO EN CÓDIGO: director/revision.jsp registra comentarios de propuesta.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-45 - El sistema deberá permitir al Estudiante cargar una nueva versión de la propuesta después de atender las observaciones del Docente Director.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: propuesta_version agrega versiones numeradas, sin borrar las anteriores.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-46 - El sistema deberá permitir al Docente Director registrar el aval de la propuesta cuando considere que está lista para continuar con el proceso de evaluación.
+Actor: Docente Director
+✅ IMPLEMENTADO EN CÓDIGO: director_avalar actualiza estado de propuesta tras revisión.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-47 - El sistema deberá conservar las versiones de la propuesta y relacionar cada versión con el usuario que la cargó y su fecha y hora.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: Tabla propuestas almacena versión, autor y fecha.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-48 - El sistema deberá permitir al Estudiante consultar el estado de revisión de la propuesta y las observaciones registradas por los responsables del proceso.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: estudiante/propuesta.jsp muestra estado y observaciones.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-49 - El sistema deberá permitir al Estudiante registrar en la propuesta el Grupo de Investigación al que se asocia el Trabajo de Grado y la Línea de Investigación correspondiente, de acuerdo con la información consignada en el F-DC-124 y el catálogo institucional vigente.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: El formulario registra Grupo y Línea del catálogo de investigación.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-50 - El sistema deberá validar que la Línea de Investigación seleccionada pertenezca al Grupo de Investigación registrado y deberá conservar ambos datos como parte de la ficha oficial de la propuesta.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: La acción consulta pertenencia de la línea seleccionada al grupo indicado.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-51 - El sistema deberá permitir al Comité formalizar la asignación del Docente Director y del codirector cuando corresponda.
+Actor: Comité
+✅ IMPLEMENTADO EN CÓDIGO: Comité usa comite/asignaciones.jsp para ambos roles.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-52 - El sistema deberá permitir al Comité asignar y formalizar un Docente Evaluador de acuerdo con el perfil y disponibilidad requeridos.
+Actor: Comité
+✅ IMPLEMENTADO EN CÓDIGO: comite/perfiles.jsp registra programa, disponibilidad y facultad de evaluación; acciones/guardar.jsp rechaza asignación incompatible.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-53 - El sistema deberá impedir que el mismo docente sea simultáneamente Docente Director y Docente Evaluador del Informe Final de un mismo proyecto.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: Acción impide igual ID y los roles se diferencian en la base de datos.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-54 - Para la evaluación de propuestas de planes posteriores al Decreto 1330, el sistema deberá permitir la excepción reglamentaria en la que el docente de Seminario de Grado I o III actúa como Director y Evaluador de la propuesta cuando aplique.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: comite/asignaciones.jsp permite excepción registrada para plan posterior; evaluador/evaluacion.jsp y acciones/guardar.jsp dejan al Director evaluar solo la propuesta excepcional.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-55 - El sistema deberá permitir al responsable autorizado registrar el resultado de la revisión de similitud mediante Turnitin cuando este control forme parte del procedimiento de la propuesta.
+Actor: Docente Director / Docente Evaluador
+✅ IMPLEMENTADO EN CÓDIGO: director/revision.jsp y evaluador/evaluacion.jsp: registro del resultado de similitud para los responsables.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-56 - El sistema deberá permitir al Docente Evaluador abrir la propuesta asignada junto con sus datos generales, documento F-DC-124, versiones y soportes relacionados.
+Actor: Docente Evaluador
+✅ IMPLEMENTADO EN CÓDIGO: evaluador/evaluacion.jsp presenta expediente, integrantes, grupo, línea, modalidad, versiones y documentos autorizados.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-57 - El sistema deberá precargar en la evaluación los datos generales de la propuesta, estudiantes, modalidad, programa y Docente Evaluador para evitar su digitación repetida.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: evaluador/evaluacion.jsp precarga datos de estudiante/equipo, programa, modalidad, periodo, grupo y línea desde MySQL.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-58 - El sistema deberá mostrar en la evaluación únicamente los criterios e indicadores aplicables a la modalidad de la propuesta.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: Consulta filtra criterios por modalidad y tipo.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-59 - El sistema deberá permitir al Docente Evaluador guardar una evaluación en borrador antes de enviarla de forma definitiva.
+Actor: Docente Evaluador
+✅ IMPLEMENTADO EN CÓDIGO: evaluacion_iniciar y evaluacion_criterio permiten guardar respuestas progresivas.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-60 - El sistema deberá impedir el envío definitivo de una evaluación mientras existan indicadores obligatorios sin responder.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: evaluacion_finalizar exige todos los criterios obligatorios registrados.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-61 - El sistema deberá permitir al Docente Evaluador registrar observaciones generales y observaciones asociadas a los criterios de la propuesta.
+Actor: Docente Evaluador
+✅ IMPLEMENTADO EN CÓDIGO: Registro de comentarios de cada criterio y texto de concepto final.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-62 - El sistema deberá poner a disposición del Estudiante y del Docente Director las observaciones de la evaluación una vez esta sea enviada de forma definitiva.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: comun/historial.jsp expone evaluaciones definitivas a estudiante y director autorizados.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-63 - El sistema deberá permitir al Estudiante cargar la versión corregida de la propuesta y los soportes solicitados después de una evaluación.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: estudiante/documentos.jsp: permite cargar archivo corregido (tipo Correcciones) conservando versiones.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-64 - El sistema deberá permitir al Docente Director revisar las correcciones realizadas y registrar si la propuesta corregida puede continuar con el flujo correspondiente.
+Actor: Docente Director
+✅ IMPLEMENTADO EN CÓDIGO: El Director consulta versiones y registra observaciones/aval.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-65 - El sistema deberá permitir al Comité consultar la propuesta, el aval del Docente Director, la evaluación, las correcciones y las versiones existentes antes de tomar una decisión.
+Actor: Comité
+✅ IMPLEMENTADO EN CÓDIGO: comun/historial.jsp: expediente autorizado con documentos, decisiones, historial y evaluaciones.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-66 - El sistema deberá conservar el historial de cada evaluación, incluyendo Docente Evaluador, fecha, respuestas, observaciones y concepto emitido.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: Tablas evaluaciones/evaluacion_criterios almacenan responsable, fecha y respuestas.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-67 - El sistema deberá permitir al Docente Evaluador diligenciar la rejilla institucional del F-DC-124, marcando Cumple: Sí o No para los indicadores aplicables de ficha técnica, descripción del problema, justificación, objetivos, estado del arte, fundamento teórico, resultados esperados, plan de actividades, presupuesto y los demás criterios definidos por el formato vigente.
+Actor: Docente Evaluador
+✅ IMPLEMENTADO EN CÓDIGO: evaluador/evaluacion.jsp utiliza indicadores por modalidad de criterios; comite/criterios.jsp permite mantener la rejilla conforme a F-DC-124. Requiere cotejo con la versión institucional.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-68 - El sistema deberá validar que todos los criterios aplicables de la rejilla F-DC-124 estén registrados antes de permitir al Docente Evaluador emitir el concepto final; para emitir el concepto Aprobado deberán cumplirse todos los criterios aplicables.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: El servidor SQL rechaza envío incompleto y APROBADO con criterios negativos.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-69 - El sistema deberá permitir al Docente Evaluador registrar el concepto final de la evaluación de la propuesta y las observaciones que lo sustentan.
+Actor: Docente Evaluador
+✅ IMPLEMENTADO EN CÓDIGO: Registro de APROBADO/NO_APROBADO/CORRECCIONES y sustento.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-70 - El sistema deberá permitir al Comité registrar la decisión final de aprobación o no aprobación de la propuesta y asociarla al proyecto correspondiente.
+Actor: Comité
+✅ IMPLEMENTADO EN CÓDIGO: Comité registra resultado asociado al proyecto, con restricciones de fase.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-71 - El sistema deberá permitir al Comité registrar el acta o soporte de la decisión tomada sobre la propuesta.
+Actor: Comité
+✅ IMPLEMENTADO EN CÓDIGO: comite/decisiones.jsp sube un acta física con subir_archivo.jsp o vincula URL HTTPS; decisiones conserva referencia y token.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-72 - El sistema deberá informar al Estudiante y al Docente Director la decisión registrada por el Comité y la fecha en que fue emitida.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: acciones/guardar.jsp crea avisos en notificaciones; estudiante/director consultan la fecha y decisión.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-73 - El sistema deberá impedir que el Estudiante avance a la fase de desarrollo mientras la propuesta no se encuentre aprobada.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: Cambio a DESARROLLO se hace por aprobación del Comité.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-74 - El sistema deberá habilitar la fase siguiente únicamente cuando se cumplan las condiciones requeridas por el estado actual del proyecto.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: acciones/guardar.jsp condiciona envíos y aprobación de fases a estado y roles; la fase de desarrollo exige decisión del Comité.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-75 - El sistema deberá permitir al Comité devolver una propuesta a una etapa anterior cuando la decisión académica registrada así lo requiera, conservando la trazabilidad del cambio.
+Actor: Comité
+✅ IMPLEMENTADO EN CÓDIGO: Comité devuelve a PROPUESTA y crea evento histórico.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-76 - El sistema deberá conservar como versión oficial la propuesta aprobada, incluyendo el documento, los objetivos, el Grupo de Investigación y la Línea de Investigación registrados.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: decisión de propuesta aprobada marca versión oficial; propuestas.oficial y trigger preservan los campos del documento oficial.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-77 - Una vez aprobada la propuesta, el sistema deberá bloquear la edición directa del objetivo general y de los datos esenciales de la versión oficial; si se requiere modificarlos, el Comité deberá autorizar el cambio y el sistema deberá crear una nueva versión conservando el valor anterior en el historial.
+Actor: Sistema / Comité
+✅ IMPLEMENTADO EN CÓDIGO: comite/decisiones.jsp autoriza un cambio por motivo; estudiante/propuesta.jsp permite una nueva versión y acciones/guardar.jsp conserva la anterior sin sobrescribirla.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-78 - El sistema deberá permitir al Estudiante registrar o adjuntar la información del pago de la modalidad cuando dicho pago aplique.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: estudiante/documentos.jsp permite carga física de comprobante y estudiante/pagos.jsp registra referencia y documento asociado.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-79 - El sistema deberá asociar cada pago al Estudiante, proyecto, modalidad y periodo académico correspondientes.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: Inserta pago con estudiante, proyecto, modalidad y periodo desde la base.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-80 - El sistema deberá permitir al Estudiante consultar el estado y la vigencia del pago registrado.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: estudiante/pagos.jsp muestra la validación del Comité y calcula vencimiento según periodos de la regla configurada.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-81 - El sistema deberá controlar la vigencia del pago de acuerdo con el periodo académico y las reglas aplicables al tipo de plan de estudios y modalidad.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: comite/reglas_pagos.jsp parametriza vigencia por modalidad y tipo de plan; consultas SQL detectan vencimiento. El Comité debe ingresar los valores oficiales.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-82 - El sistema deberá permitir al Estudiante solicitar un cambio de modalidad únicamente mientras el proyecto se encuentre en una etapa que permita realizarlo.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: Acción limita la solicitud a estados de propuesta autorizados.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-83 - El sistema deberá permitir al Comité aprobar o rechazar la solicitud de cambio de modalidad.
+Actor: Comité
+✅ IMPLEMENTADO EN CÓDIGO: Comité aprueba o rechaza solicitudes pendientes.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-84 - El sistema deberá impedir el cambio de modalidad cuando el proyecto haya superado la etapa autorizada para dicha modificación.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: SQL verifica fase PROPUESTA y estado permitido antes de aplicar cambio.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-85 - El sistema deberá conservar la trazabilidad del cambio de modalidad, registrando modalidad anterior, nueva modalidad, solicitante, decisión, responsable y fecha.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: Almacena anterior, nueva, solicitante, responsable y fecha de decisión.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-86 - El sistema deberá permitir al Estudiante cargar documentos y evidencias asociados al desarrollo del proyecto.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: estudiante/documentos.jsp + archivos y archivo_partes: subida persistente de evidencias de desarrollo.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-87 - El sistema deberá permitir al Docente Director revisar los documentos de desarrollo y registrar observaciones de seguimiento.
+Actor: Docente Director
+✅ IMPLEMENTADO EN CÓDIGO: Director puede consultar referencias y registrar observaciones de desarrollo.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-88 - El sistema deberá permitir al Estudiante cargar el Informe Final y los entregables requeridos por la modalidad, incluyendo manual de usuario, código fuente u otros documentos cuando correspondan.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: estudiante/documentos.jsp: admite Informe Final, manual, código fuente y soportes como archivos físicos.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-89 - El sistema deberá permitir al Docente Director revisar el Informe Final y registrar su aval cuando considere que se cumplieron los objetivos aprobados.
+Actor: Docente Director
+✅ IMPLEMENTADO EN CÓDIGO: Director registra aval si existe referencia de Informe Final.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-90 - El sistema deberá impedir el envío del Informe Final al Docente Evaluador mientras no exista el aval del Docente Director.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: evaluacion_iniciar exige estado INFORME_AVALADO.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-91 - El sistema deberá permitir al Docente Evaluador consultar el Informe Final avalado, sus entregables y los antecedentes necesarios para realizar la evaluación final.
+Actor: Docente Evaluador
+✅ IMPLEMENTADO EN CÓDIGO: evaluador/evaluacion.jsp y comun/archivo.jsp: consulta autorizada de entregables del Informe Final.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-92 - El sistema deberá permitir al Docente Evaluador registrar el resultado de la evaluación final, las observaciones y las correcciones solicitadas cuando correspondan.
+Actor: Docente Evaluador
+✅ IMPLEMENTADO EN CÓDIGO: Evaluador registra concepto, criterios y observaciones del informe.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-93 - El sistema deberá permitir al Estudiante cargar una versión corregida del Informe Final después de atender las observaciones de la evaluación.
+Actor: Estudiante
+✅ IMPLEMENTADO EN CÓDIGO: estudiante/documentos.jsp: subida de nueva versión de Informe Final o corrección.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-94 - El sistema deberá permitir al Docente Director revisar las correcciones del Informe Final y solicitar una nueva evaluación cuando considere que fueron atendidas.
+Actor: Docente Director
+✅ IMPLEMENTADO EN CÓDIGO: director/revision.jsp y accion solicitar_reevaluacion exigen correcciones cargadas y una evaluación anterior; vuelven a habilitar al Evaluador.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-95 - El sistema deberá permitir al Comité programar la sustentación del Trabajo de Grado y registrar fecha, lugar o medio, participantes y estado de la actividad.
+Actor: Comité
+✅ IMPLEMENTADO EN CÓDIGO: Comité registra fecha, lugar, participantes y estado.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-96 - El sistema deberá permitir al Docente Evaluador registrar el resultado o concepto correspondiente a la sustentación cuando aplique.
+Actor: Docente Evaluador
+✅ IMPLEMENTADO EN CÓDIGO: Evaluador registra resultado tras marcarse realizada.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-97 - El sistema deberá permitir al Comité registrar la aprobación final del Trabajo de Grado cuando se hayan cumplido las condiciones académicas y documentales requeridas.
+Actor: Comité
+✅ IMPLEMENTADO EN CÓDIGO: El cierre exige evaluación final aprobada y sustentación aprobada.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-98 - El sistema deberá finalizar un proyecto únicamente cuando se encuentren completas las fases, evaluaciones, decisiones y entregables obligatorios.
+Actor: Sistema
+✅ IMPLEMENTADO EN CÓDIGO: acciones/guardar.jsp impide finalizar sin propuesta oficial y aprobada, Informe Final, evaluación aprobada, sustentación y entregables obligatorios por modalidad.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-99 - El sistema deberá permitir al Comité gestionar la publicación de los documentos finales aprobados en el repositorio institucional y registrar restricciones de acceso por propiedad intelectual, propiedad industrial o secreto empresarial.
+Actor: Comité
+✅ IMPLEMENTADO EN CÓDIGO: comite/publicaciones.jsp registra restricciones, motivo, estado pendiente/publicado y URL oficial del repositorio. La publicación externa se confirma manualmente; no hay API UTS conectada.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RF-100 - El sistema deberá permitir al Comité registrar el cierre definitivo del proceso y dejar disponible el historial completo del proyecto para consulta posterior.
+Actor: Comité
+⚠️ NO COMPROBADO: No se encontró evidencia en el informe anterior.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-01 - El sistema deberá garantizar que cada usuario solamente pueda acceder a las funcionalidades y a la información correspondientes a su rol y a los proyectos que esté autorizado a consultar.
+Actor: Seguridad y acceso
+⚠️ PARCIAL: seguridad.jspf revisa sesión, rol y cuenta activa en cada petición; sin pruebas de integración/adversariales.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-02 - El sistema deberá proteger la información de los proyectos y documentos frente a usuarios no autorizados.
+Actor: Confidencialidad
+⚠️ PARCIAL: Roles y referencias controladas; sin validación de TLS ni protección de repositorio en producción.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-03 - El sistema deberá mantener la integridad de la información y evitar relaciones o estados inconsistentes entre usuarios, proyectos, documentos, evaluaciones y decisiones.
+Actor: Integridad
+⚠️ PARCIAL: Existe esquema relacional con FK y varias restricciones; no están cubiertos todos los estados posibles.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-04 - Cada cambio de estado deberá quedar auditado con el usuario responsable, la acción realizada, el valor anterior, el valor nuevo y la fecha y hora.
+Actor: Trazabilidad
+⚠️ PARCIAL: Guarda historial/autor/fecha en numerosas acciones, pero no todas las transiciones incluyen anterior y nuevo.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-05 - Los usuarios funcionales no deberán poder modificar ni eliminar los registros de auditoría generados por el sistema.
+Actor: Inmutabilidad de auditoría
+✅ IMPLEMENTADO EN CÓDIGO: Triggers SQL rechazan UPDATE/DELETE sobre auditoria.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-06 - La plataforma deberá permanecer disponible durante los periodos definidos para la gestión de Trabajos de Grado, salvo ventanas de mantenimiento previamente informadas.
+Actor: Disponibilidad
+⚠️ PENDIENTE DE PRUEBA OPERATIVA: No está alojado ni monitorizado en infraestructura operativa.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-07 - El sistema deberá evitar registros parciales y preservar la información confirmada cuando ocurra una interrupción durante operaciones de registro o actualización.
+Actor: Recuperación ante fallos
+⚠️ PARCIAL: Se usan transacciones en acciones complejas; algunas escrituras requieren atomicidad adicional.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-08 - Las operaciones habituales de inicio de sesión, consulta, búsqueda, filtrado y registro deberán responder de forma fluida bajo condiciones normales de uso.
+Actor: Rendimiento
+⚠️ PENDIENTE DE PRUEBA OPERATIVA: No se ha ejecutado prueba de carga, latencia o concurrencia.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-09 - La interfaz deberá presentar las funcionalidades de forma clara, uniforme y diferenciada según el rol del usuario.
+Actor: Usabilidad
+✅ IMPLEMENTADO EN CÓDIGO: Interfaz CSS responsiva con menú y funciones diferenciadas por rol.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-10 - La interfaz deberá permitir identificar claramente el estado, fase, periodo y fechas relevantes de cada proyecto.
+Actor: Visibilidad del proceso
+✅ IMPLEMENTADO EN CÓDIGO: Las pantallas muestran fase, estado, periodo y fechas de proyecto.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-11 - El sistema deberá conservar la relación entre cada documento, el proyecto al que pertenece, su versión, el usuario que lo cargó y la fecha y hora de registro.
+Actor: Integridad documental
+✅ IMPLEMENTADO EN CÓDIGO: documentos, archivos y archivo_partes conservan proyecto, versión, responsable, fecha y contenido persistido.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-12 - El sistema deberá controlar la visibilidad de la información sujeta a propiedad intelectual, propiedad industrial o secreto empresarial.
+Actor: Propiedad intelectual
+⚠️ PARCIAL: comite/publicaciones.jsp guarda nivel público/restringido/reservado; faltan pruebas del control efectivo en repositorio institucional.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-13 - El sistema deberá mantener la consistencia de los datos cuando varios usuarios autorizados intervengan sobre un mismo proyecto.
+Actor: Consistencia multiusuario
+⚠️ PENDIENTE DE PRUEBA OPERATIVA: No hay pruebas de concurrencia ni bloqueo/versionado optimista en todas las operaciones.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-14 - Cuando una operación sea rechazada por rol, fase, estado, fecha o condición académica, el sistema deberá mostrar un mensaje claro indicando la causa.
+Actor: Mensajes de validación
+⚠️ PARCIAL: Hay avisos genéricos, no explicaciones específicas en todos los rechazos.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-15 - La base de datos deberá contar con una copia de seguridad automática diaria.
+Actor: Respaldo diario
+⚠️ PENDIENTE DE PRUEBA OPERATIVA: operacion/backup_mysql.sh prepara volcado, pero no está programado en servidor.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-16 - Las copias de seguridad diarias deberán conservarse durante 30 días antes de su eliminación o rotación automática.
+Actor: Retención de respaldos
+⚠️ PENDIENTE DE PRUEBA OPERATIVA: El script elimina respaldos antiguos; su ejecución diaria no está configurada ni comprobada.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-17 - La solución deberá utilizar una base de datos relacional MySQL alojada en línea como repositorio principal de la información oficial.
+Actor: Persistencia en línea
+❌ NO CUMPLE LITERALMENTE: La implementación usa Supabase PostgreSQL y no MySQL online, por solicitud posterior del propietario.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+RNF-18 - La solución deberá permitir actualizar reglas académicas, fechas, modalidades, rejillas y permisos sin requerir cambios innecesarios en módulos no relacionados.
+Actor: Mantenibilidad
+⚠️ PARCIAL: Catálogos y periodos editables parcialmente; no todas las reglas/rejillas son parametrizables.
+Prueba funcional real en Tomcat + Supabase: PENDIENTE.
+
+COMPROBACIONES REPRODUCIBLES:
+- Verificar index.jsp, login.jsp, WEB-INF/web.xml y controlador JDBC en WEB-INF/lib.
+- Validar estructura de etiquetas JSP/JSTL y consultas parametrizadas.
+- Comprobar 5 roles, menú, proyectos, seguimiento y Banco de Ideas en Tomcat y base de datos online.
+- Ejecutar casos negativos de permisos y CSRF; verificar backups y retención fuera de Tomcat.
+- NO marcar 118 pruebas funcionales como aprobadas sin ejecución.

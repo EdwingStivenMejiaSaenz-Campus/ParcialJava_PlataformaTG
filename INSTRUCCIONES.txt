@@ -1,0 +1,17 @@
+PARCIAL EDWING MEJÍA - JUAN LACHE | UTS
+
+ESTRUCTURA DE ENTREGA
+Esta carpeta contiene index.jsp, login.jsp, los módulos JSP para los cinco roles, WEB-INF/jspf, css, js, recursos gráficos, controlador PostgreSQL JDBC en WEB-INF/lib, y verificación de 118 requisitos dentro de WEB-INF/verificacion.
+
+INSTALACIÓN (SIN .war, SIN Maven, SIN instaladores):
+1. Detener Tomcat desde el panel XAMPP.
+2. Guardar un respaldo de cualquier carpeta previa Parcial_EdwingMejia_JuanLache. Si queda un archivo Parcial_EdwingMejia_JuanLache.war antiguo, también apartarlo antes de reiniciar Tomcat para que no sobrescriba esta carpeta.
+3. Extraer o copiar la carpeta Parcial_EdwingMejia_JuanLache (NO pegar directamente el .zip) en C:\xampp\tomcat\webapps\. Si ya esta instalada, COMBINAR y REEMPLAZAR sus archivos sin borrar la carpeta previa: asi se conserva la biblioteca JSTL que ya agregaste.
+4. Verificar que index.jsp, login.jsp y WEB-INF estén directamente en webapps\Parcial_EdwingMejia_JuanLache\.
+5. Iniciar Tomcat 8.5 y visitar http://localhost:8080/Parcial_EdwingMejia_JuanLache/.
+
+JSTL: Esta carpeta usa JSTL 1.2. El ejemplo del usuario trae drivers JDBC pero NO JSTL.jar. El error SQL previo en su Tomcat confirma que JSTL fue ejecutada allí; por eso esta entrega reutiliza esa instalación de JSTL. Para otra máquina se requiere además JSTL 1.2 en Tomcat/lib o WEB-INF/lib. No se garantiza ejecución en una Tomcat sin JSTL.
+
+En esta versión para GitHub, WEB-INF/web.xml contiene CONFIGURAR_LOCALMENTE en DB_PASSWORD. Antes de ejecutar en Tomcat, reemplazar ese marcador en tu copia local con una credencial válida. NO subir después la contraseña al repositorio. Rotar la credencial original antes de compartirla públicamente.
+
+IMPORTANTE: compilación estática y ZIP íntegro verificados; conexión real Supabase desde el Tomcat del usuario NO comprobada. La base de datos online está en Supabase; Tomcat local sigue en localhost. Requisito RNF-17 original solicita MySQL online, incompatible con la decisión posterior de usar Supabase PostgreSQL.

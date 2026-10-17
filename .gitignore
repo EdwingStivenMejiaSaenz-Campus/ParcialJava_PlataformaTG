@@ -1,0 +1,26 @@
+# Archivos de sistema y del IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Compilación y archivos temporales
+*.class
+build/
+target/
+work/
+
+# Script local de publicación; no pertenece a la aplicación
+subir_a_github.bat
+
+# Archivos locales de secretos (guardar aparte)
+.env
+.env.*
+WEB-INF/web.xml.local
+WEB-INF/web.xml.backup
+WEB-INF/web.xml.bak
