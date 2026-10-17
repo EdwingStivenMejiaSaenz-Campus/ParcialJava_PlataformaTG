@@ -1,0 +1,31 @@
+PROYECTO UTS — INFORME DE CORRECCIONES Y COMPROBACIONES
+
+Nombre: Parcial_EdwingMejia_JuanLache
+Arquitectura conservada: JSP + JSTL + JSPF, sin servlets ni clases Java propias.
+
+ERRORES CORREGIDOS
+- Formularios de Usuarios y Auditoría: parámetros numéricos filtrados como texto en PostgreSQL; añadidas conversiones explícitas y seguras para valores opcionales.
+- Otros módulos: normalización de comparaciones SQL de identificadores y banderas numéricas; revisado el número de parámetros por bloque.
+- Inicio de sesión: conexión JDBC PostgreSQL con un pool compartido de 8 conexiones en JSP/JSPF; no abre una nueva conexión por cada consulta JSTL.
+- Seguimiento: consultas de comprobación de fases reagrupadas en una sola consulta SQL; bloqueo visual de acciones de etapas futuras.
+- Interfaz: logo en PNG transparente, iconografía SVG, formularios de Usuarios en ventanas, tabla resumida, botones por rol, búsquedas, paginación y presentación móvil.
+- Supabase: índices de apoyo al listado de proyectos, pagos y decisiones en esquema uts_grado.
+
+DATOS DEMOSTRATIVOS EN SUPABASE (NO EXPEDIENTES REALES DE ESTUDIANTES)
+- Ocho proyectos con códigos GRA-009xx y PRA-0026.
+- Cinco ideas del banco; datos ficticios inspirados por las capturas, sin copiar documentos, teléfonos ni nombres de estudiantes reales.
+- Ejemplos de pagos y actas/decisiones/evaluaciones de demostración para visualizar el avance de las cinco fases.
+- Los datos se cargaron exclusivamente en el esquema uts_grado, sin cambiar las tablas biblioteca_*.
+
+VERIFICACIONES REALIZADAS
+- Validación estática: 60 archivos JSP/JSPF y 217 bloques SQL, etiquetas y parámetros sin desajustes según comprobador local.
+- Ejecución en Supabase de consultas preparadas de listados de Usuarios y Auditoría, sin error de tipos.
+- Validación remota de 8 proyectos, 5 ideas, 6 pagos validados, 5 evaluaciones y 3 decisiones.
+- Integridad de controlador PostgreSQL JAR comprobada.
+- PNG transparente comprobado; SVG de iconografía local creado.
+
+LIMITACIONES DE LA VERIFICACIÓN
+- No se ha desplegado esta nueva versión en el Tomcat de Windows del usuario, así que no se afirma que todos los recorridos funcionales ni los 118 requisitos hayan sido aprobados de extremo a extremo.
+- Los tiempos reales deben medirse en XAMPP con la red del usuario; no se dispone de benchmark de latencia local.
+- JSTL 1.2 ya está en WEB-INF/lib de la instalación existente del usuario. Este ZIP NO la incluye porque no se dispone de sus bytes en este entorno: al actualizar, COMBINAR con la carpeta existente sin eliminar WEB-INF/lib.
+- La conexión a Supabase utiliza una credencial de demostración ya existente. No debe publicarse ni compartirse el ZIP tal como está; reemplazar/rotar contraseña antes de entregar públicamente al profesor.

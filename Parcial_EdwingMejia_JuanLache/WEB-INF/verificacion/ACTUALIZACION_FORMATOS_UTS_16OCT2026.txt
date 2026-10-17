@@ -1,0 +1,24 @@
+ACTUALIZACIÓN BASE DOCUMENTAL · 16 OCTUBRE 2026
+
+1. Se agregaron seis recursos a uts_grado.formatos en Supabase (sin borrar existentes):
+   - F-DC-124: propuesta de trabajo de grado (repositorio oficial de documentos de grado).
+   - F-DC-125: informe final (repositorio oficial).
+   - F-DC-129: rejilla de evaluación del informe final (repositorio oficial).
+   - Repositorio oficial de Documentos de Grado de Ingeniería de Sistemas UTS.
+   - Reglamento de Trabajo de Grado, Acuerdo 01-026 de 2021 (PDF directo).
+   - Portal de Ingeniería de Sistemas UTS.
+2. Para cada F-DC se indica "Consultar UTS" donde la versión exacta no fue verificable.
+3. Pestaña Base documental: mejora de presentación y apertura de enlaces HTTPS oficiales.
+4. Conexión: reemplazado PGPoolingDataSource por BasicDataSource de Tomcat 8.5,
+   con validación SQL al pedir conexión, espera limitada y descarte de conexiones ociosas.
+   Se aumentó tiempo SSL de conexión, conservando el servidor y las credenciales.
+5. No se han realizado pruebas del nuevo paquete ejecutándose en el XAMPP del usuario.
+6. Para despliegue se requiere: Tomcat 8.5 con tomcat-dbcp.jar; JSTL 1.2 en WEB-INF/lib (del entorno previo);
+   y controlador PostgreSQL JDBC incluido en WEB-INF/lib.
+7. Las credenciales DB del entorno original siguen en WEB-INF/web.xml; antes de compartir el código,
+   reemplazar los valores o configurar la conexión externamente para evitar filtraciones.
+
+FUENTES VERIFICADAS:
+- https://sistemastg.uts.edu.co/
+- https://www.dropbox.com/scl/fo/pudgcaq639agy7t06ahjs/AN084HnuyHffgYL5i--v_Ks/DOCUMENTOS%20DE%20GRADO?dl=0&rlkey=6s0b9ajweteyx2ang7ywvk6xm&subfolder_nav_tracking=1
+- https://www.uts.edu.co/sitio/wp-content/uploads/normatividad/acuerdos/acu-73.pdf
