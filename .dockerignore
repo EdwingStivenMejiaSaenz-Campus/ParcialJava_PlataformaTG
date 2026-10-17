@@ -1,0 +1,15 @@
+# Mantener archivos locales y secretos fuera de la imagen
+.git
+.gitignore
+.env
+.env.*
+*.log
+*.zip
+*.war
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+WEB-INF/web.xml.local
+WEB-INF/web.xml.backup
+WEB-INF/web.xml.bak
