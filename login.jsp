@@ -14,7 +14,7 @@
 <c:if test="${not empty falloToken}"><c:set var="errorLogin" value="No fue posible abrir la sesión. Comprueba la conexión a Supabase."/></c:if></c:when>
 <c:otherwise><c:set var="errorLogin" value="Correo o contraseña incorrectos, o cuenta inactiva."/></c:otherwise></c:choose></c:otherwise></c:choose>
 </c:if>
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Iniciar sesión · Ingeniería de Sistemas UTS</title><link rel="stylesheet" href="css/estilos.css"></head><body class="auth-page">
+<!doctype html><html lang="es"><head><link rel="icon" type="image/png" href="favicon.png?v=20261017"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Iniciar sesión · Ingeniería de Sistemas UTS</title><link rel="stylesheet" href="css/estilos.css"></head><body class="auth-page">
 <section class="uts-auth"><img class="uts-auth-logo" src="img/logo-sistemas-transparente.png" alt="Ingeniería de Sistemas UTS"><form class="uts-auth-card" method="post" action="login.jsp" autocomplete="on">
 <h1>Iniciar <span class="label-dark">SESIÓN</span></h1>
 <c:if test="${not empty errorLogin}"><div class="alert error" role="alert"><c:out value="${errorLogin}"/></div></c:if>

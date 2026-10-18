@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sistema · Trabajos de Grado UTS</title><link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilos.css"><script defer src="${pageContext.request.contextPath}/js/panel-uts.js"></script></head>
+<!doctype html><html lang="es"><head><link rel="icon" type="image/png" href="${pageContext.request.contextPath}/favicon.png?v=20261017"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sistema · Trabajos de Grado UTS</title><link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilos.css"><script defer src="${pageContext.request.contextPath}/js/panel-uts.js"></script></head>
 <body class="uts-panel-layout"><div class="uts-app"><aside class="uts-side" id="navegacion">
 <div class="uts-side-brand"><img src="${pageContext.request.contextPath}/img/logo-sistemas-transparente.png" alt="Ingeniería de Sistemas UTS"><button type="button" aria-label="Contraer menú" class="nav-toggle" data-toggle-nav><svg class="ui-icon" aria-hidden="true"><use href="${pageContext.request.contextPath}/img/icons.svg#menu"/></svg></button></div>
 <nav aria-label="Navegación principal">
