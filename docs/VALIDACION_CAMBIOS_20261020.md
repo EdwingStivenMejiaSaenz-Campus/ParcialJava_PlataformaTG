@@ -36,3 +36,11 @@ Cambios en la portada pública, alta de usuarios, Banco de Ideas, visibilidad de
 - Guardar evidencia con URL, rol, acción, resultado, fecha y captura (sin credenciales).
 - No subir `WEB-INF/web.xml` con claves, cadenas de conexión, backups o tokens a GitHub.
 - No integrar esta rama en `main` ni desplegar hasta verificar las pruebas de Render, especialmente altas, evaluación y permisos por rol.
+
+
+## Incidencias adicionales recibidas (capturas de Render, 20 oct 2026)
+
+- **Pago: fecha_pago PostgreSQL DATE**. Captura: error `column "fecha_pago" is of type date but expression is of type character varying`. Corregido en `acciones/guardar.jsp` usando `CAST(NULLIF(?::text,'') AS date)` y validación de longitud de la fecha. En `estudiante/pagos.jsp` se aclara que la URL HTTPS o el comprobante almacenado son obligatorios. Se ejecutó `EXPLAIN` del INSERT con fecha `2026-10-20` contra `uts_grado`, sin efectuar escrituras. **No se probó el POST real en Render**.
+- **Banco de Ideas: HTTP 500 en consulta SQL**. Se ejecutó `EXPLAIN` de la consulta de `estudiante/banco.jsp` en las ramas `main` y esta rama con la base real; ambas se analizaron sin error SQL. La captura de Render corresponde a una versión desplegada que muestra una falla distinta: es indispensable desplegar la nueva fuente y probarla allí.
+- **guardar.jsp: error de análisis EL ${final.rows[0].total eq 0}**. Esa expresión **no existe** en `acciones/guardar.jsp` de esta rama. La captura de Render puede reflejar un despliegue desactualizado. No declarar corregido en servidor hasta confirmar el nuevo build.
+- **Acceso por estudiante**: lectura de datos: los **11 proyectos existentes están asociados al mismo estudiante de prueba (ID 2)**; es el único ESTUDIANTE en la base consultada. El filtrado por dueño no ocultará proyectos que efectivamente pertenecen a ese mismo usuario. Para comprobar aislamiento, crear otra cuenta de prueba y revisar que no vea estos proyectos. No reasignar ni eliminar registros existentes.
