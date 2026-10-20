@@ -1,18 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %><%@ include file="/WEB-INF/jspf/seguridad.jspf" %><%@ include file="/WEB-INF/jspf/conexion.jspf" %>
-<sql:query var="ideas" dataSource="${db}">SELECT i.id,i.titulo,i.descripcion,i.estado,i.nivel,i.modalidad_id,pe.nombre AS periodo,pe.estado AS periodo_estado,pe.apertura_banco,pe.cierre_banco,m.nombre AS modalidad FROM ideas i JOIN periodos pe ON pe.id=i.periodo_id LEFT JOIN modalidades m ON m.id=i.modalidad_id WHERE (? IN('COMITE','ADMINISTRADOR','DIRECTOR','EVALUADOR')) OR (?='ESTUDIANTE' AND i.estado='ABIERTA' AND pe.estado='ACTIVO' AND CURRENT_DATE BETWEEN pe.apertura_banco AND pe.cierre_banco AND m.activo=1 AND EXISTS(
-  SELECT 1 FROM usuarios u WHERE u.id=CAST(NULLIF(?::text,'') AS bigint)
-  AND u.activo=1 AND u.programa_id=i.programa_id AND (i.nivel IS NULL OR i.nivel=u.nivel)
-  AND NOT EXISTS (SELECT 1 FROM proyectos px JOIN proyecto_estudiantes ep ON ep.proyecto_id=px.id WHERE px.idea_id=i.id AND ep.estudiante_id=u.id AND px.estado NOT IN ('RECHAZADO','FINALIZADO'))
-  AND (u.nivel<>'TECNICO' OR m.nombre='Práctica')
-  AND ((u.plan='ANTERIOR' AND u.metodologia=1 AND
-        ((m.nombre IN ('Proyecto de Investigación','Desarrollo Tecnológico','Monografía','Emprendimiento') AND u.creditos>=75 AND u.nivel<>'TECNICO')
-         OR (m.nombre='Seminario' AND u.creditos>=90 AND u.nivel<>'TECNICO')
-         OR (m.nombre='Práctica' AND u.creditos>=uts_if(u.nivel='TECNICO',70,90))))
-       OR (u.plan='POSTERIOR' AND
-         ((u.nivel='TECNOLOGO' AND u.matricula_seminario_i=1 AND u.seminario_i=1 AND u.seminario_ii=1)
-          OR (u.nivel='PROFESIONAL' AND u.matricula_seminario_iii=1 AND u.seminario_iii=1 AND u.seminario_iv=1)
-          OR (u.nivel='TECNICO' AND u.matricula_seminario_i=1 AND u.seminario_i=1 AND u.seminario_ii=1)))
-))) ORDER BY i.id DESC LIMIT 400
+<sql:query var="ideas" dataSource="${db}">SELECT i.id,i.titulo,i.descripcion,i.estado,i.nivel,i.modalidad_id,pe.nombre AS periodo,pe.estado AS periodo_estado,pe.apertura_banco,pe.cierre_banco,m.nombre AS modalidad FROM ideas i JOIN periodos pe ON pe.id=i.periodo_id LEFT JOIN modalidades m ON m.id=i.modalidad_id WHERE (? IN('COMITE','ADMINISTRADOR','DIRECTOR','EVALUADOR')) OR (?='ESTUDIANTE' AND i.estado='ABIERTA' AND pe.estado='ACTIVO' AND CURRENT_DATE BETWEEN pe.apertura_banco AND pe.cierre_banco AND m.activo=1 AND EXISTS(SELECT 1 FROM usuarios u WHERE u.id=CAST(NULLIF(?::text,'') AS bigint) AND u.activo=1 AND u.rol='ESTUDIANTE' AND u.programa_id=i.programa_id AND (i.nivel IS NULL OR u.nivel IS NULL OR i.nivel=u.nivel) AND NOT EXISTS(SELECT 1 FROM proyectos px JOIN proyecto_estudiantes ep ON ep.proyecto_id=px.id WHERE px.idea_id=i.id AND ep.estudiante_id=u.id AND px.estado NOT IN ('RECHAZADO','FINALIZADO')))) ORDER BY i.id DESC LIMIT 400
 <sql:param value="${sessionScope.rol}"/><sql:param value="${sessionScope.rol}"/><sql:param value="${sessionScope.usuarioId}"/></sql:query>
 <%@ include file="/WEB-INF/jspf/cabecera.jspf" %><div class="uts-toolbar"><h1 class="uts-heading">Banco de <b>IDEAS</b></h1><div class="uts-toolbuttons"><c:if test="${sessionScope.rol eq 'COMITE'}"><a class="icon-action green" href="../comite/ideas.jsp" title="Gestionar y republicar ideas"><svg class="ui-icon" aria-hidden="true"><use href="${pageContext.request.contextPath}/img/icons.svg#refresh"/></svg> Republicar ideas</a></c:if></div></div>
 <div class="uts-searchbar"><label>Mostrar <select data-page-size><option>5</option><option>10</option><option>20</option></select> registros por página</label><label>Buscar: <input type="search" data-filter-table="tablaBanco" placeholder="Ingrese una clave."></label></div>
