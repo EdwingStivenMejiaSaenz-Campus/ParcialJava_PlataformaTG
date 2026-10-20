@@ -6,7 +6,7 @@
 
 <%@ include file="/WEB-INF/jspf/cabecera.jspf" %>
 <div class="uts-toolbar"><h1 class="uts-heading">Gestión de <b>USUARIOS</b></h1>
- <button type="button" class="icon-action green" data-modal="nuevo-usuario"><svg class="ui-icon"><use href="${pageContext.request.contextPath}/img/icons.svg#users"/></svg> + Crear nuevo usuario</button>
+ <a class="icon-action green" href="nuevo_usuario.jsp"><svg class="ui-icon"><use href="${pageContext.request.contextPath}/img/icons.svg#users"/></svg> + Crear nuevo usuario</a>
 </div>
 <div class="uts-searchbar"><label>Mostrar <select data-page-size><option>5</option><option>10</option><option>20</option></select> registros por página</label>
 <label>Buscar: <input type="search" data-filter-table="tablaUsuarios" placeholder="Ingrese una clave" aria-label="Buscar usuarios"/></label></div>

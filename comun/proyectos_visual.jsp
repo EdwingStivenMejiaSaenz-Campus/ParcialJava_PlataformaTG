@@ -1,4 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %><%@ include file="/WEB-INF/jspf/seguridad.jspf" %><%@ include file="/WEB-INF/jspf/conexion.jspf" %>
+<%-- Vista general reservada a la gestión académica. El estudiante usa su expediente privado. --%>
+<c:if test="${sessionScope.rol eq 'ESTUDIANTE'}"><c:redirect url="/estudiante/proyectos.jsp"/></c:if>
 <c:set var="tipo" value="${param.tipo eq 'practicas' ? 'practicas' : 'proyectos'}"/>
 <sql:query var="proyectos" dataSource="${db}">SELECT p.id,p.codigo,p.titulo,p.fase,p.estado,p.director_id,p.evaluador_id,EXISTS(SELECT 1 FROM pagos pp WHERE pp.proyecto_id=p.id AND pp.estado='VALIDADO') AS pago_ok,u.nombre AS estudiante,m.nombre AS modalidad,pe.nombre AS periodo FROM proyectos p JOIN usuarios u ON u.id=p.estudiante_id JOIN modalidades m ON m.id=p.modalidad_id JOIN periodos pe ON pe.id=p.periodo_id
 WHERE ((? IN('COMITE','ADMINISTRADOR')) OR (?='ESTUDIANTE' AND EXISTS(SELECT 1 FROM proyecto_estudiantes s WHERE s.proyecto_id=p.id AND s.estudiante_id=CAST(NULLIF(?::text,'') AS bigint))) OR (?='DIRECTOR' AND p.director_id=CAST(NULLIF(?::text,'') AS bigint)) OR (?='EVALUADOR' AND p.evaluador_id=CAST(NULLIF(?::text,'') AS bigint))) AND ((?='practicas' AND m.nombre='Práctica') OR (?='proyectos' AND m.nombre!='Práctica')) ORDER BY p.modificado_en DESC LIMIT 500
