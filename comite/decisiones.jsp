@@ -9,7 +9,7 @@
 <c:forEach var="p" items="${proyectos.rows}"><tr><td><strong><c:out value="${p.titulo}"/></strong><div class="mini"><c:out value="${p.codigo}"/> · <c:out value="${p.estudiante}"/></div></td><td><c:out value="${p.fase}"/> / <strong><c:out value="${p.estado}"/></strong></td><td><a href="../comun/historial.jsp?id=${p.id}">Ver historial</a> · <a href="../comun/seguimiento.jsp?id=${p.id}">Seguimiento</a></td><td>
 <c:choose><c:when test="${p.fase eq 'PROPUESTA' and p.estado eq 'EVALUADA'}">
 <form method="post" action="../acciones/guardar.jsp"><input type="hidden" name="csrf" value="${sessionScope.csrf}"><input type="hidden" name="accion" value="comite_decidir"><input type="hidden" name="proyecto_id" value="${p.id}"><input type="hidden" name="resultado" value="APROBADO">
-<div class="field"><label>Observación / decisión</label><input name="observacion" required value="Evaluación aprobada, propuesta autorizada" maxlength="280"></div><div class="field"><label>Acta de Comité por Drive (opcional)</label><input type="url" name="acta_url" placeholder="https://drive.google.com/..."></div><button type="submit">Aprobación final · pasar de fase</button></form>
+<div class="field"><label>Observación / decisión</label><input name="observacion" required value="Evaluación aprobada, propuesta autorizada" maxlength="280"></div><div class="field"><label>Acta de Comité por Drive (opcional)</label><input type="url" name="acta_url" maxlength="900" placeholder="https://drive.google.com/..."></div><button type="submit">Aprobación final · pasar de fase</button></form>
 </c:when><c:otherwise><span class="mini">Pendiente de completar los requisitos anteriores.</span></c:otherwise></c:choose>
 </td></tr></c:forEach></tbody></table></div>
 <%@ include file="/WEB-INF/jspf/pie.jspf" %>
