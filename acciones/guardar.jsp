@@ -64,7 +64,7 @@
 </sql:transaction><c:set var="destino" value="/estudiante/proyectos.jsp?ok=1"/>
 </c:when>
 <c:when test="${param.accion eq 'propuesta_version'}">
-<c:if test="${sessionScope.rol ne 'ESTUDIANTE' or not fn:startsWith(param.fdc124_url,'https://') or fn:length(param.fdc124_url) gt 950}"><c:redirect url="/estudiante/proyectos.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
+<c:if test="${sessionScope.rol ne 'ESTUDIANTE' or not fn:startsWith(param.fdc124_url,'https://') or fn:length(param.fdc124_url) gt 900}"><c:redirect url="/estudiante/proyectos.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
 <sql:query var="acceso" dataSource="${db}">SELECT p.id,p.estado FROM proyectos p WHERE p.id=CAST(NULLIF(?::text,'') AS bigint) AND p.fase='PROPUESTA' AND p.estado IN ('BORRADOR','CON_OBSERVACIONES') AND EXISTS(SELECT 1 FROM proyecto_estudiantes pe WHERE pe.proyecto_id=p.id AND pe.estudiante_id=CAST(NULLIF(?::text,'') AS bigint)) AND EXISTS(SELECT 1 FROM pagos pg WHERE pg.proyecto_id=p.id AND pg.estado='VALIDADO')
 <sql:param value="${param.proyecto_id}"/><sql:param value="${sessionScope.usuarioId}"/></sql:query>
 <c:if test="${empty acceso.rows}"><c:redirect url="/estudiante/proyectos.jsp"><c:param name="error" value="fase"/></c:redirect></c:if>
@@ -98,7 +98,7 @@ VALUES(CAST(NULLIF(?::text,'') AS bigint),CAST(NULLIF(?::text,'') AS bigint),'F-
 <c:set var="destino" value="/estudiante/propuesta.jsp?id=${param.proyecto_id}&amp;ok=1"/>
 </c:when>
 <c:when test="${param.accion eq 'documento_crear'}">
-<c:if test="${sessionScope.rol ne 'ESTUDIANTE' or not fn:startsWith(param.url,'https://') or empty param.nombre}"><c:redirect url="/dashboard.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
+<c:if test="${sessionScope.rol ne 'ESTUDIANTE' or not fn:startsWith(param.url,'https://') or fn:length(param.url) gt 900 or empty param.nombre}"><c:redirect url="/dashboard.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
 <sql:query var="acceso" dataSource="${db}">SELECT p.id FROM proyectos p JOIN proyecto_estudiantes e ON e.proyecto_id=p.id WHERE p.id=CAST(NULLIF(?::text,'') AS bigint) AND e.estudiante_id=CAST(NULLIF(?::text,'') AS bigint) AND p.estado NOT IN ('FINALIZADO','RECHAZADO') AND (? <> 'Informe Final' OR p.fase IN ('DESARROLLO','INFORME_FINAL'))<sql:param value="${param.proyecto_id}"/><sql:param value="${sessionScope.usuarioId}"/><sql:param value="${param.tipo}"/></sql:query><c:if test="${empty acceso.rows}"><c:redirect url="/dashboard.jsp"><c:param name="error" value="acceso"/></c:redirect></c:if>
 <sql:update dataSource="${db}">INSERT INTO documentos(proyecto_id,version,tipo,nombre,url,usuario_id) SELECT CAST(NULLIF(?::text,'') AS bigint),COALESCE(MAX(version),0)+1,?,?,?,CAST(NULLIF(?::text,'') AS bigint) FROM documentos WHERE proyecto_id=CAST(NULLIF(?::text,'') AS bigint) AND tipo=?
 <sql:param value="${param.proyecto_id}"/><sql:param value="${param.tipo}"/><sql:param value="${param.nombre}"/><sql:param value="${param.url}"/><sql:param value="${sessionScope.usuarioId}"/><sql:param value="${param.proyecto_id}"/><sql:param value="${param.tipo}"/></sql:update>
@@ -106,7 +106,7 @@ VALUES(CAST(NULLIF(?::text,'') AS bigint),CAST(NULLIF(?::text,'') AS bigint),'F-
 <c:set var="destino" value="/estudiante/documentos.jsp?id=${param.proyecto_id}&ok=1"/>
 </c:when>
 <c:when test="${param.accion eq 'pago_crear'}">
-<c:if test="${sessionScope.rol ne 'ESTUDIANTE' or not fn:startsWith(param.url,'https://') or fn:length(param.url) gt 950}"><c:redirect url="/estudiante/pagos.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
+<c:if test="${sessionScope.rol ne 'ESTUDIANTE' or not fn:startsWith(param.url,'https://') or fn:length(param.url) gt 900}"><c:redirect url="/estudiante/pagos.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
 <sql:update var="afectadas" dataSource="${db}">INSERT INTO pagos(proyecto_id,estudiante_id,modalidad_id,periodo_id,referencia,url,fecha_pago)
 SELECT p.id,CAST(NULLIF(?::text,'') AS bigint),p.modalidad_id,p.periodo_id,CONCAT('TG-',p.id,'-',to_char(CURRENT_TIMESTAMP,'YYYYMMDDHH24MISS')),?,CURRENT_DATE
 FROM proyectos p WHERE p.id=CAST(NULLIF(?::text,'') AS bigint) AND p.fase='PROPUESTA' AND p.estado IN('BORRADOR','CON_OBSERVACIONES')
@@ -174,7 +174,7 @@ AND EXISTS(SELECT 1 FROM usuarios e WHERE e.id=CAST(NULLIF(?::text,'') AS bigint
 <c:set var="destino" value="/evaluador/evaluacion.jsp?id=${comprobacion.rows[0].proyecto_id}&ok=1"/>
 </c:when>
 <c:when test="${param.accion eq 'comite_decidir'}">
-<c:if test="${sessionScope.rol ne 'COMITE' or empty param.observacion or (not empty param.acta_url and not fn:startsWith(param.acta_url,'https://'))}"><c:redirect url="/dashboard.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
+<c:if test="${sessionScope.rol ne 'COMITE' or empty param.observacion or (not empty param.acta_url and (not fn:startsWith(param.acta_url,'https://') or fn:length(param.acta_url) gt 900))}"><c:redirect url="/dashboard.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
 <sql:query var="proyecto" dataSource="${db}">SELECT p.* FROM proyectos p WHERE p.id=CAST(NULLIF(?::text,'') AS bigint)<sql:param value="${param.proyecto_id}"/></sql:query><c:if test="${empty proyecto.rows}"><c:redirect url="/dashboard.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
 <c:set var="p" value="${proyecto.rows[0]}"/>
 <c:if test="${not empty param.acta_token}"><sql:query var="soporteActa" dataSource="${db}">SELECT id FROM archivos WHERE token=? AND proyecto_id=CAST(NULLIF(?::text,'') AS bigint) AND tipo='Acta del Comité' AND estado='COMPLETO'<sql:param value="${param.acta_token}"/><sql:param value="${p.id}"/></sql:query><c:if test="${empty soporteActa.rows}"><c:redirect url="/comite/decisiones.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if></c:if>
