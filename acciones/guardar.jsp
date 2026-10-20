@@ -209,6 +209,20 @@ AND NOT EXISTS(SELECT 1 FROM pagos pg WHERE pg.proyecto_id=p.id AND pg.estado IN
 <sql:update var="afectadas" dataSource="${db}">UPDATE proyectos SET excepcion_tres=CAST(NULLIF(?::text,'') AS smallint) WHERE id=CAST(NULLIF(?::text,'') AS bigint) AND fase='PROPUESTA' AND modalidad_id IN(SELECT m.id FROM modalidades m WHERE m.nombre IN('Proyecto de Investigación','Desarrollo Tecnológico'))<sql:param value="${param.excepcion_tres}"/><sql:param value="${param.proyecto_id}"/></sql:update>
 <c:if test="${afectadas eq 0}"><c:redirect url="/comite/asignaciones.jsp"><c:param name="error" value="fase"/></c:redirect></c:if><sql:update dataSource="${db}">INSERT INTO historial(proyecto_id,usuario_id,evento,nuevo) VALUES(?,?,'Excepción de integrantes',?)<sql:param value="${param.proyecto_id}"/><sql:param value="${sessionScope.usuarioId}"/><sql:param value="${param.excepcion_tres}"/></sql:update><c:set var="destino" value="/comite/asignaciones.jsp?ok=1"/>
 </c:when>
+<c:when test="${param.accion eq 'integrante_unirse'}">
+<c:if test="${sessionScope.rol ne 'ESTUDIANTE' or empty fn:trim(param.codigo)}"><c:redirect url="/estudiante/proyectos.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
+<sql:query var="proyectoUnir" dataSource="${db}">SELECT p.id,p.codigo FROM proyectos p JOIN usuarios u ON u.id=CAST(NULLIF(?::text,'') AS bigint) WHERE (p.codigo=? OR p.id::text=?) AND p.fase='PROPUESTA' AND p.estado='BORRADOR' AND u.rol='ESTUDIANTE' AND u.activo=1 AND u.programa_id=p.programa_id AND NOT EXISTS(SELECT 1 FROM proyecto_estudiantes e WHERE e.proyecto_id=p.id AND e.estudiante_id=u.id) AND (SELECT COUNT(*) FROM proyecto_estudiantes e2 WHERE e2.proyecto_id=p.id) < CASE WHEN p.excepcion_tres=1 THEN 3 ELSE 2 END
+<sql:param value="${sessionScope.usuarioId}"/><sql:param value="${fn:trim(param.codigo)}"/><sql:param value="${fn:trim(param.codigo)}"/></sql:query>
+<c:if test="${empty proyectoUnir.rows}"><c:redirect url="/estudiante/proyectos.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
+<sql:update var="afectadas" dataSource="${db}">INSERT INTO proyecto_estudiantes(proyecto_id,estudiante_id)
+SELECT p.id,u.id FROM proyectos p JOIN usuarios u ON u.id=CAST(NULLIF(?::text,'') AS bigint)
+WHERE p.id=CAST(NULLIF(?::text,'') AS bigint) AND p.fase='PROPUESTA' AND p.estado='BORRADOR' AND u.rol='ESTUDIANTE' AND u.activo=1 AND u.programa_id=p.programa_id AND NOT EXISTS(SELECT 1 FROM proyecto_estudiantes e WHERE e.proyecto_id=p.id AND e.estudiante_id=u.id) AND (SELECT COUNT(*) FROM proyecto_estudiantes e2 WHERE e2.proyecto_id=p.id) < CASE WHEN p.excepcion_tres=1 THEN 3 ELSE 2 END
+<sql:param value="${sessionScope.usuarioId}"/><sql:param value="${proyectoUnir.rows[0].id}"/></sql:update>
+<c:if test="${afectadas eq 0}"><c:redirect url="/estudiante/proyectos.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
+<sql:update dataSource="${db}">INSERT INTO historial(proyecto_id,usuario_id,evento,detalle) VALUES(CAST(NULLIF(?::text,'') AS bigint),CAST(NULLIF(?::text,'') AS bigint),'Estudiante vinculado','Integración mediante código del proyecto')
+<sql:param value="${proyectoUnir.rows[0].id}"/><sql:param value="${sessionScope.usuarioId}"/></sql:update>
+<c:set var="destino" value="/estudiante/proyectos.jsp?ok=1"/>
+</c:when>
 <c:when test="${param.accion eq 'integrante_agregar'}">
 <c:if test="${sessionScope.rol ne 'ESTUDIANTE' or empty param.identificacion}"><c:redirect url="/dashboard.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
 <sql:update var="afectadas" dataSource="${db}">INSERT INTO proyecto_estudiantes(proyecto_id,estudiante_id)
