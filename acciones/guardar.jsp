@@ -83,7 +83,7 @@ FROM proyectos p WHERE p.id=CAST(NULLIF(?::text,'') AS bigint)
 <sql:update>INSERT INTO historial(proyecto_id,usuario_id,evento,detalle) VALUES(CAST(NULLIF(?::text,'') AS bigint),CAST(NULLIF(?::text,'') AS bigint),'F-DC-124 registrado','Enlace externo registrado para revisión')
 <sql:param value="${param.proyecto_id}"/><sql:param value="${sessionScope.usuarioId}"/></sql:update>
 </sql:transaction>
-<c:set var="destino" value="/estudiante/propuesta.jsp?id=${param.proyecto_id}&amp;ok=1"/>
+<c:set var="destino" value="/estudiante/propuesta.jsp?id=${param.proyecto_id}&ok=1"/>
 </c:when>
 <c:when test="${param.accion eq 'propuesta_enviar'}">
 <c:if test="${sessionScope.rol ne 'ESTUDIANTE'}"><c:redirect url="/dashboard.jsp"><c:param name="error" value="acceso"/></c:redirect></c:if>
@@ -97,7 +97,7 @@ AND EXISTS(SELECT 1 FROM documentos d WHERE d.proyecto_id=p.id AND d.tipo='Propu
 <sql:update dataSource="${db}">INSERT INTO historial(proyecto_id,usuario_id,evento,anterior,nuevo)
 VALUES(CAST(NULLIF(?::text,'') AS bigint),CAST(NULLIF(?::text,'') AS bigint),'F-DC-124 enviado al Director','BORRADOR','EN_REVISION')
 <sql:param value="${param.proyecto_id}"/><sql:param value="${sessionScope.usuarioId}"/></sql:update>
-<c:set var="destino" value="/estudiante/propuesta.jsp?id=${param.proyecto_id}&amp;ok=1"/>
+<c:set var="destino" value="/estudiante/propuesta.jsp?id=${param.proyecto_id}&ok=1"/>
 </c:when>
 <c:when test="${param.accion eq 'documento_crear'}">
 <c:if test="${sessionScope.rol ne 'ESTUDIANTE' or not fn:startsWith(param.url,'https://') or fn:length(param.url) gt 900 or empty param.nombre}"><c:redirect url="/dashboard.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
@@ -257,7 +257,7 @@ SELECT p.id,u.id FROM proyectos p JOIN usuarios u ON u.identificacion=? AND u.ro
 <c:when test="${param.accion eq 'similitud_registrar'}">
 <c:if test="${(sessionScope.rol ne 'DIRECTOR' and sessionScope.rol ne 'EVALUADOR') or empty param.resultado or fn:length(param.resultado) gt 120}"><c:redirect url="/dashboard.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
 <sql:update var="registrado" dataSource="${db}">INSERT INTO observaciones(proyecto_id,tipo,usuario_id,comentario) SELECT p.id,'PROPUESTA',?,CONCAT('Revisión de similitud (Turnitin): ',?) FROM proyectos p WHERE p.id=CAST(NULLIF(?::text,'') AS bigint) AND ((?='DIRECTOR' AND p.director_id=CAST(NULLIF(?::text,'') AS bigint)) OR (?='EVALUADOR' AND p.evaluador_id=CAST(NULLIF(?::text,'') AS bigint)))
-<sql:param value="${sessionScope.usuarioId}"/><sql:param value="${param.resultado}"/><sql:param value="${param.proyecto_id}"/><sql:param value="${sessionScope.rol}"/><sql:param value="${sessionScope.usuarioId}"/><sql:param value="${sessionScope.rol}"/><sql:param value="${sessionScope.usuarioId}"/></sql:update><c:set var="destino" value="/comun/historial.jsp?id=${param.proyecto_id}&amp;ok=1"/>
+<sql:param value="${sessionScope.usuarioId}"/><sql:param value="${param.resultado}"/><sql:param value="${param.proyecto_id}"/><sql:param value="${sessionScope.rol}"/><sql:param value="${sessionScope.usuarioId}"/><sql:param value="${sessionScope.rol}"/><sql:param value="${sessionScope.usuarioId}"/></sql:update><c:set var="destino" value="/comun/historial.jsp?id=${param.proyecto_id}&ok=1"/>
 </c:when>
 <c:when test="${param.accion eq 'notificacion_leida'}">
 <sql:update dataSource="${db}">UPDATE notificaciones SET leida=1 WHERE id=CAST(NULLIF(?::text,'') AS bigint) AND usuario_id=CAST(NULLIF(?::text,'') AS bigint)<sql:param value="${param.id}"/><sql:param value="${sessionScope.usuarioId}"/></sql:update><c:set var="destino" value="/comun/notificaciones.jsp?ok=1"/>
@@ -327,7 +327,7 @@ WHERE id=CAST(NULLIF(?::text,'') AS bigint) AND estado='PENDIENTE'
 <sql:update var="n" dataSource="${db}">UPDATE proyectos p SET estado='INFORME_AVALADO' WHERE p.id=CAST(NULLIF(?::text,'') AS bigint) AND p.director_id=CAST(NULLIF(?::text,'') AS bigint) AND p.fase='INFORME_FINAL' AND p.estado='INFORME_EN_REVISION' AND EXISTS(SELECT 1 FROM evaluaciones e WHERE e.proyecto_id=p.id AND e.tipo='INFORME_FINAL' AND e.estado='DEFINITIVA' AND e.concepto='CORRECCIONES') AND (SELECT COUNT(*) FROM documentos d WHERE d.proyecto_id=p.id AND d.tipo='Informe Final')>=2
 <sql:param value="${param.proyecto_id}"/><sql:param value="${sessionScope.usuarioId}"/></sql:update>
 <c:if test="${n eq 0}"><c:redirect url="/director/proyectos.jsp"><c:param name="error" value="fase"/></c:redirect></c:if>
-<sql:update dataSource="${db}">INSERT INTO historial(proyecto_id,usuario_id,evento,anterior,nuevo) VALUES(CAST(NULLIF(?::text,'') AS bigint),CAST(NULLIF(?::text,'') AS bigint),'Nueva evaluación solicitada','INFORME_EN_REVISION','INFORME_AVALADO')<sql:param value="${param.proyecto_id}"/><sql:param value="${sessionScope.usuarioId}"/></sql:update><c:set var="destino" value="/director/revision.jsp?id=${param.proyecto_id}&amp;ok=1"/>
+<sql:update dataSource="${db}">INSERT INTO historial(proyecto_id,usuario_id,evento,anterior,nuevo) VALUES(CAST(NULLIF(?::text,'') AS bigint),CAST(NULLIF(?::text,'') AS bigint),'Nueva evaluación solicitada','INFORME_EN_REVISION','INFORME_AVALADO')<sql:param value="${param.proyecto_id}"/><sql:param value="${sessionScope.usuarioId}"/></sql:update><c:set var="destino" value="/director/revision.jsp?id=${param.proyecto_id}&ok=1"/>
 </c:when>
 <c:when test="${param.accion eq 'entregable_parametrizar'}">
 <c:if test="${sessionScope.rol ne 'COMITE' or empty param.tipo or fn:length(param.tipo) gt 90 or (param.obligatorio ne '0' and param.obligatorio ne '1')}"><c:redirect url="/dashboard.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
