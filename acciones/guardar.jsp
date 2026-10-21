@@ -78,6 +78,8 @@ FROM proyectos p WHERE p.id=CAST(NULLIF(?::text,'') AS bigint)
 SELECT p.id,COALESCE((SELECT MAX(d.version) FROM documentos d WHERE d.proyecto_id=p.id AND d.tipo='Propuesta F-DC-124'),0)+1,'Propuesta F-DC-124','F-DC-124 en Google Drive',?,CAST(NULLIF(?::text,'') AS bigint)
 FROM proyectos p WHERE p.id=CAST(NULLIF(?::text,'') AS bigint)
 <sql:param value="${param.fdc124_url}"/><sql:param value="${sessionScope.usuarioId}"/><sql:param value="${param.proyecto_id}"/></sql:update>
+<sql:update>UPDATE proyectos p SET estado='EN_REVISION' WHERE p.id=CAST(NULLIF(?::text,'') AS bigint) AND p.director_id IS NOT NULL AND p.fase='PROPUESTA' AND p.estado IN('BORRADOR','CON_OBSERVACIONES') AND EXISTS(SELECT 1 FROM pagos pg WHERE pg.proyecto_id=p.id AND pg.estado='VALIDADO') AND EXISTS(SELECT 1 FROM documentos d WHERE d.proyecto_id=p.id AND d.tipo='Propuesta F-DC-124' AND d.url LIKE 'https://%')
+<sql:param value="${param.proyecto_id}"/></sql:update>
 <sql:update>INSERT INTO historial(proyecto_id,usuario_id,evento,detalle) VALUES(CAST(NULLIF(?::text,'') AS bigint),CAST(NULLIF(?::text,'') AS bigint),'F-DC-124 registrado','Enlace externo registrado para revisión')
 <sql:param value="${param.proyecto_id}"/><sql:param value="${sessionScope.usuarioId}"/></sql:update>
 </sql:transaction>
@@ -151,6 +153,8 @@ EXISTS(SELECT 1 FROM usuarios d WHERE d.id=CAST(NULLIF(?::text,'') AS bigint) AN
 AND EXISTS(SELECT 1 FROM usuarios e WHERE e.id=CAST(NULLIF(?::text,'') AS bigint) AND e.rol='EVALUADOR' AND e.activo=1)
 <sql:param value="${param.director_id}"/><sql:param value="${param.evaluador_id}"/><sql:param value="${param.codirector_id}"/><sql:param value="${param.proyecto_id}"/><sql:param value="${param.director_id}"/><sql:param value="${param.evaluador_id}"/></sql:update>
 <c:if test="${afectadas eq 0}"><c:redirect url="/comite/asignaciones.jsp"><c:param name="error" value="validacion"/></c:redirect></c:if>
+<sql:update dataSource="${db}">UPDATE proyectos p SET estado='EN_REVISION' WHERE p.id=CAST(NULLIF(?::text,'') AS bigint) AND p.fase='PROPUESTA' AND p.estado IN('BORRADOR','CON_OBSERVACIONES') AND p.director_id IS NOT NULL AND EXISTS(SELECT 1 FROM pagos pg WHERE pg.proyecto_id=p.id AND pg.estado='VALIDADO') AND EXISTS(SELECT 1 FROM documentos d WHERE d.proyecto_id=p.id AND d.tipo='Propuesta F-DC-124' AND d.url LIKE 'https://%')
+<sql:param value="${param.proyecto_id}"/></sql:update>
 <sql:update dataSource="${db}">INSERT INTO historial(proyecto_id,usuario_id,evento,detalle) VALUES(CAST(NULLIF(?::text,'') AS bigint),CAST(NULLIF(?::text,'') AS bigint),'Docentes asignados','Director y Evaluador designados por Comité')
 <sql:param value="${param.proyecto_id}"/><sql:param value="${sessionScope.usuarioId}"/></sql:update>
 <c:set var="destino" value="/comite/asignaciones.jsp?ok=1"/>
