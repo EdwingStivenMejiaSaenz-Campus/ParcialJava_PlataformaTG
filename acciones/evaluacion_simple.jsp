@@ -16,4 +16,4 @@ SELECT p.id,CAST(NULLIF(?::text,'') AS bigint),'PROPUESTA','DEFINITIVA',?,?,NOW(
 <sql:update>INSERT INTO historial(proyecto_id,usuario_id,evento,nuevo,detalle) VALUES(CAST(NULLIF(?::text,'') AS bigint),CAST(NULLIF(?::text,'') AS bigint),'Evaluación del docente',?,?)
 <sql:param value="${param.proyecto_id}"/><sql:param value="${sessionScope.usuarioId}"/><sql:param value="${param.concepto}"/><sql:param value="${param.observaciones}"/></sql:update>
 </sql:transaction>
-<c:redirect url="/evaluador/evaluacion.jsp?id=${param.proyecto_id}&amp;ok=1"/>
+<c:redirect url="/evaluador/evaluacion.jsp?id=${param.proyecto_id}&ok=1"/>
